@@ -44,8 +44,13 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Vec
             match res.get_mut(&name) {
                 Some(array) => {
                     // skip repeat mark position.
-                    if array.iter().find(|&x| x.pos == note.pos).is_none() {
-                        array.push(note);
+                    match array.iter().position(|x| x.pos.start == note.pos.start) {
+                        Some(n) => {
+                            array[n] = note;
+                        }
+                        None => {
+                            array.push(note);
+                        }
                     }
                 }
                 None => {
