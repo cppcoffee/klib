@@ -38,7 +38,11 @@ fn main() -> Result<()> {
 
     for (name, notes) in kns {
         let p = opt.outdir.join(name + ".md");
-        let mut file = OpenOptions::new().create(true).write(true).open(p)?;
+        let mut file = OpenOptions::new()
+            .write(true)
+            .truncate(true)
+            .write(true)
+            .open(p)?;
 
         for note in notes {
             file.write_vectored(&vec![
