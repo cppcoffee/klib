@@ -5,7 +5,6 @@ extern crate quick_error;
 extern crate lazy_static;
 
 use std::fs::OpenOptions;
-use std::io::IoSlice;
 use std::io::Write;
 use std::path::PathBuf;
 
@@ -34,9 +33,9 @@ struct Opt {
 
 fn main() -> Result<()> {
     let opt = Opt::from_args();
-    let kns = parse_kindle_notes(opt.input)?;
+    let notes = parse_kindle_notes(opt.input)?;
 
-    for (name, notes) in kns {
+    for (name, text) in notes {
         let p = opt.outdir.join(name + ".md");
         let mut file = OpenOptions::new()
             .write(true)
@@ -44,13 +43,7 @@ fn main() -> Result<()> {
             .write(true)
             .open(p)?;
 
-        for note in notes {
-            file.write_vectored(&vec![
-                IoSlice::new(b"- "),
-                IoSlice::new(note.text.as_bytes()),
-                IoSlice::new(b"\n\n"),
-            ])?;
-        }
+        file.write(text.as_bytes())?;
     }
 
     println!("output directory: {}", opt.outdir.to_str().unwrap());

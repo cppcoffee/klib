@@ -13,7 +13,7 @@ lazy_static! {
 
 /// the clippings note item.
 #[derive(Debug)]
-pub struct Note {
+struct Note {
     // sign position, format #start-end.
     pos: Range<i32>,
     // mark text.
@@ -28,8 +28,8 @@ pub struct Note {
 ///  \n
 ///  note text\n
 ///  ==========\n
-pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Vec<Note>>> {
-    let mut res: HashMap<String, Vec<Note>> = HashMap::new();
+pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, String>> {
+    let mut kmap: HashMap<String, Vec<Note>> = HashMap::new();
     let mut stem = Vec::new();
 
     let pbuf = path.as_ref().to_path_buf();
@@ -41,7 +41,7 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Vec
         if stem.len() >= 5 {
             let (name, note) = parse_note(&stem)?;
 
-            match res.get_mut(&name) {
+            match kmap.get_mut(&name) {
                 Some(array) => {
                     // skip repeat mark position.
                     match array.iter().position(|x| x.pos.start == note.pos.start) {
@@ -54,14 +54,15 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Vec
                     }
                 }
                 None => {
-                    res.insert(name, vec![note]);
+                    kmap.insert(name, vec![note]);
                 }
             }
             stem.clear();
         }
     }
 
-    Ok(res)
+    // convert into HashMap<String, String>
+    flat_notes(&kmap)
 }
 
 fn parse_note(stem: &Vec<String>) -> Result<(String, Note)> {
@@ -82,4 +83,20 @@ fn try_parse_range(s: &str) -> Option<Range<i32>> {
     let end = caps.get(2)?.as_str().parse::<i32>().ok()?;
 
     Some(Range { start, end })
+}
+
+fn flat_notes(kmap: &HashMap<String, Vec<Note>>) -> Result<HashMap<String, String>> {
+    let mut res = HashMap::new();
+
+    for (name, notes) in kmap {
+        let mut s = String::new();
+        for note in notes {
+            s.push_str("- ");
+            s.push_str(&note.text);
+            s.push_str("\n\n");
+        }
+        res.insert(name.clone(), s);
+    }
+
+    Ok(res)
 }
