@@ -43,7 +43,7 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Str
 
             match kmap.get_mut(&name) {
                 Some(array) => {
-                    // skip repeat mark position.
+                    // repeat mark position, use last record.
                     match array.iter().position(|x| x.pos.start == note.pos.start) {
                         Some(n) => {
                             array[n] = note;

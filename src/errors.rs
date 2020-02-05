@@ -20,9 +20,35 @@ quick_error! {
             cause(err)
             display("Parse int error: {}", err)
         }
+        /// HTTP reqwest Error
+        Reqwest(err: reqwest::Error) {
+            from()
+            cause(err)
+            display("Reqwest Error: {}", err)
+        }
+        /// serde error
+        SerdeJSON(err: serde_json::Error) {
+            from()
+            cause(err)
+            display("srde_json error: {}", err)
+        }
+        /// HTTP reqwest Invalid Header Value.
+        InvalidHeaderValue(err: reqwest::header::InvalidHeaderValue) {
+            from()
+            cause(err)
+            display("Reqwest Invalid Header: {}", err)
+        }
         /// note mark range invalid
         NoteRange(desc: String) {
             display("Note range format error: {}", desc)
+        }
+        /// Invalid Response.
+        InvalidResponse(url: String, resp: reqwest::blocking::Response) {
+            display("{} invalid response: {:?}", url, resp)
+        }
+        /// Invalid Response Metadata Json.
+        InvalidMetaJson(value: String) {
+            display("invalid meta data json: {}", value)
         }
     }
 }
