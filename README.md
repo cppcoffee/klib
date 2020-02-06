@@ -1,7 +1,7 @@
 # klib
 The kindle notebook export tool.
 
-## usage
+## Usage
 
 supports two usages：
 
@@ -30,9 +30,9 @@ SUBCOMMANDS:
     path      Output to specified directory.
 ```
 
-### subcommand
+### Subcommand
 
-#### export to directory
+#### Export to directory
 
 use **path** subcommand
 
@@ -42,14 +42,16 @@ use **path** subcommand
 $ ./klib -i ~/Download/MyClippings.txt path --outdir ~/kindle_notes/
 ```
 
-#### sync github
+#### Sync github
 
 use **github** subcommand
 
 The function use github API (https://developer.github.com/v3/repos/contents/#create-or-update-a-file) create and update repo notes. program skip no modify notes.
 
 **--owner**: repository owner name.
+
 **--repo**: repository name.
+
 **--token**: github OAuth2 token.
 
 ```shell
