@@ -87,16 +87,16 @@ pub fn sync_repo(
         match metas.get(&path) {
             Some(m) => {
                 if is_url_same_text(&client, &m.download_url, text)? {
-                    println!("{} no modified, skip.", path);
+                    println!("===> {}", path);
                     continue;
                 }
 
                 put_note(&client, &url, Some(m.sha.clone()), text)?;
-                println!("{} put done.", path);
+                println!("+++> {}", path);
             }
             None => {
                 put_note(&client, &url, None, text)?;
-                println!("{} put done.", path);
+                println!("+++> {}", path);
             }
         }
     }
