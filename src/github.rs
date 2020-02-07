@@ -76,6 +76,8 @@ pub fn sync_repo(
         return Err(Error::InvalidResponse(url, resp));
     }
 
+    let mut put_cnt = 0;
+    let mut nmd_cnt = 0;
     let value: serde_json::Value = resp.json()?;
     let metas = collect_metadata(&value)?;
 
@@ -88,18 +90,22 @@ pub fn sync_repo(
             Some(m) => {
                 if is_url_same_text(&client, &m.download_url, text)? {
                     println!("===> {}", path);
+                    nmd_cnt += 1;
                     continue;
                 }
 
                 put_note(&client, &url, Some(m.sha.clone()), text)?;
                 println!("+++> {}", path);
+                put_cnt += 1;
             }
             None => {
                 put_note(&client, &url, None, text)?;
                 println!("+++> {}", path);
+                put_cnt += 1;
             }
         }
     }
+    println!("total {} items put, {} items no modify.", put_cnt, nmd_cnt);
 
     Ok(())
 }
