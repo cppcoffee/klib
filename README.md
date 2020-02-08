@@ -5,8 +5,8 @@ The kindle notebook export tool.
 
 supports two usages：
 
-- export to directory (each ebook marked with a file).
-- sync github repository.
+- export to a directory (each ebook marked with a file).
+- sync Github repository.
 
 ```shell
 % ./klib --help
@@ -27,7 +27,7 @@ OPTIONS:
 SUBCOMMANDS:
     github    Upload notes to github repository.
     help      Prints this message or the help of the given subcommand(s)
-    path      Output to specified directory.
+    path      Output to the specified directory.
 ```
 
 ### Subcommand
@@ -42,21 +42,21 @@ use **path** subcommand
 $ ./klib -i ~/Download/MyClippings.txt path --outdir ~/kindle_notes/
 ```
 
-#### Sync github
+#### Sync Github
 
 use **github** subcommand
 
-The function use github API (https://developer.github.com/v3/repos/contents/#create-or-update-a-file) create and update repo notes. program skip no modify notes.
+The function use Github API (https://developer.github.com/v3/repos/contents/#create-or-update-a-file) to create and update repo notes. program skip no modify notes.
 
 **--owner**: repository owner name.
 
 **--repo**: repository name.
 
-**--token**: github OAuth2 token.
+**--token**: Github OAuth2 token.
 
 ```shell
 % ./klib -i ~/Desktop/MyClippings.txt github --owner cppcoffee --repo kindle_bookmark --token xxxxxxxxxx
 ```
 
-The github sync notes example: https://github.com/cppcoffee/kindle_bookmark
+The Github sync notes example: https://github.com/cppcoffee/kindle_bookmark
 
