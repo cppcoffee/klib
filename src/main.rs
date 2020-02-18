@@ -1,9 +1,3 @@
-#[macro_use]
-extern crate quick_error;
-
-#[macro_use]
-extern crate lazy_static;
-
 use std::collections::HashMap;
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -11,14 +5,9 @@ use std::path::PathBuf;
 
 use structopt::StructOpt;
 
-mod errors;
-use errors::Result;
-
-mod notes;
-use notes::parse_kindle_notes;
-
-mod github;
-use github::sync_repo;
+use klib::errors::Result;
+use klib::github::sync_repo;
+use klib::notes::parse_kindle_notes;
 
 /// default input path.
 const KIND_PATH: &str = "/Volumes/Kindle/documents/My Clippings.txt";
