@@ -33,9 +33,14 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Str
     let mut stem = Vec::new();
 
     let pbuf = path.as_ref().to_path_buf();
-    let contents = fs::read_to_string(path).map_err(|e| Error::File(pbuf, e))?;
+    let mut content = fs::read_to_string(path).map_err(|e| Error::File(pbuf, e))?;
 
-    for line in contents.lines() {
+    // skip file header.
+    if &content.as_bytes()[0..3] == b"\xef\xbb\xbf" {
+        content = content[3..].to_string();
+    }
+
+    for line in content.lines() {
         stem.push(line.to_string());
 
         if stem.len() >= 5 {
