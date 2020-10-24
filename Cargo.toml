@@ -11,10 +11,10 @@ name = "klib"
 
 [dependencies]
 structopt = "0.3"
-quick-error = "1.2.3"
-regex = "1"
-lazy_static = "1.4.0"
-reqwest = { version = "0.10.1", features = ["blocking", "gzip", "json"] }
-base64 = "0.11.0"
+regex = "1.4"
+quick-error = "1.0"
+lazy_static = "1.4"
+reqwest = { version = "0.10", features = ["blocking", "gzip", "json"] }
+base64 = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
