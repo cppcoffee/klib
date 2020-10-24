@@ -94,12 +94,12 @@ pub fn sync_repo(
                     continue;
                 }
 
-                put_note(&client, &url, Some(m.sha.clone()), text)?;
+                put_note(&client, &url, Some(m.sha.clone()), name, text)?;
                 println!("+++> {}", path);
                 put_cnt += 1;
             }
             None => {
-                put_note(&client, &url, None, text)?;
+                put_note(&client, &url, None, name, text)?;
                 println!("+++> {}", path);
                 put_cnt += 1;
             }
@@ -147,10 +147,10 @@ fn is_url_same_text(client: &Client, url: &str, text: &str) -> Result<bool> {
     Ok(resp.text()? == text)
 }
 
-fn put_note(client: &Client, url: &str, sha: Option<String>, text: &str) -> Result<()> {
+fn put_note(client: &Client, url: &str, sha: Option<String>, name: &str, text: &str) -> Result<()> {
     let message = match sha {
-        Some(_) => "robot update note.".to_owned(),
-        None => "robot create new note.".to_owned(),
+        Some(_) => format!("Append: {}", name),
+        None => format!("Added: {}", name),
     };
 
     let committer = Committer {
