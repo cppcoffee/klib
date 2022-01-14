@@ -70,12 +70,26 @@ pub fn parse_kindle_notes<P: AsRef<Path>>(path: P) -> Result<HashMap<String, Str
     flat_notes(&kmap)
 }
 
+fn pick_name(mut name: String) -> String {
+    let pos = name.find("(");
+    if pos.is_some() {
+        name = name[..pos.unwrap()].to_string();
+    }
+
+    let pos = name.find("（");
+    if pos.is_some() {
+        name = name[..pos.unwrap()].to_string();
+    }
+
+    name.replace("/", " ").trim().to_string()
+}
+
 fn parse_note(stem: &Vec<String>) -> Result<(String, Note)> {
     // parse mark range.
     let r = stem[1].to_string();
     let pos = try_parse_range(&r).ok_or(Error::NoteRange(r))?;
 
-    let name = stem[0].to_string();
+    let name = pick_name(stem[0].to_string());
     let text = stem[3].to_string();
 
     Ok((name, Note { pos, text }))
